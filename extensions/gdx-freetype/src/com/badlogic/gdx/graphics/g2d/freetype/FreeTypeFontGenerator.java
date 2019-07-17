@@ -377,7 +377,7 @@ public class FreeTypeFontGenerator implements Disposable {
 
 		// Create glyphs largest height first for best packing.
 		int[] heights = new int[charactersLength];
-		for (int i = 0, n = charactersLength; i < n; i++) {
+		for (int i = 0; i < charactersLength; i++) {
 			char c = characters[i];
 
 			int height = loadChar(c, flags) ? FreeType.toInt(face.getGlyph().getMetrics().getHeight()) : 0;
@@ -521,7 +521,6 @@ public class FreeTypeFontGenerator implements Disposable {
 				int shadowOffsetX = Math.max(parameter.shadowOffsetX, 0), shadowOffsetY = Math.max(parameter.shadowOffsetY, 0);
 				int shadowW = mainW + Math.abs(parameter.shadowOffsetX), shadowH = mainH + Math.abs(parameter.shadowOffsetY);
 				Pixmap shadowPixmap = new Pixmap(shadowW, shadowH, mainPixmap.getFormat());
-				shadowPixmap.setBlending(Blending.None);
 
 				Color shadowColor = parameter.shadowColor;
 				float a = shadowColor.a;
@@ -551,7 +550,6 @@ public class FreeTypeFontGenerator implements Disposable {
 				mainPixmap = shadowPixmap;
 			} else if (parameter.borderWidth == 0) {
 				// No shadow and no border, draw glyph additional times.
-				mainPixmap.setBlending(Blending.None);
 				for (int i = 0, n = parameter.renderCount - 1; i < n; i++)
 					mainPixmap.drawPixmap(mainPixmap, 0, 0);
 			}
@@ -762,7 +760,7 @@ public class FreeTypeFontGenerator implements Disposable {
 		public Color shadowColor = new Color(0, 0, 0, 0.75f);
 		/** Pixels to add to glyph spacing when text is rendered. Can be negative. */
 		public int spaceX, spaceY;
-		/** Pixels to add to the glyph in the texture. Can be negative. */
+		/** Pixels to add to the glyph in the texture. Cannot be negative. */
 		public int padTop, padLeft, padBottom, padRight;
 		/** The characters the font should contain. If '\0' is not included then {@link BitmapFontData#missingGlyph} is not set. */
 		public String characters = DEFAULT_CHARS;
